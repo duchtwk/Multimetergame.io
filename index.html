@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimeter</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            position: relative; /* Ensures that child elements can be absolutely positioned */
+        }
+
+        .back-button {
+            display: none; /* Start hidden */
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            z-index: 10; /* Ensure the button is on top */
+        }
+
+        #mainImage, .multiple-images img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .multiple-images {
+            display: none;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .multiple-images img {
+            width: 48%; /* Zwei Bilder pro Zeile */
+        }
+
+        /* Styles for the second imagemap */
+        #image-map-oziloskop {
+            display: none;
+        }
+
+        .oziloskop-map-active #image-map-oziloskop {
+            display: block;
+        }
+
+        /* Styles for the third imagemap */
+        #image-map-schaltplan {
+            display: none;
+        }
+
+        .schaltplan-map-active #image-map-schaltplan {
+            display: block;
+        }
+
+        /* Styles for the fourth imagemap */
+        #image-map-etwas {
+            display: none;
+        }
+
+        .etwas-map-active #image-map-etwas {
+            display: block;
+        }
+
+        .image-container {
+            text-align: center;
+            position: relative; /* Allows positioning of the title inside this container */
+        }
+
+        .title {
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: black;
+            font-family: Arial, sans-serif;
+        }
+
+        .title.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="image-container">
+        <h1 class="title" id="imageTitle">Multimeter</h1>
+        <img src="multimeterStart.jpg" usemap="#image-map-multimeter" id="mainImage">
+        <div class="back-button" id="backButton" onclick="handleClick(event, 'multimeterStart.jpg')">Back</div>
+    </div>
+
+    <map name="image-map-multimeter">
+        <area target="" alt="Knopf1" title="Knopf1" href="#" coords="750,168,716,132" shape="rect" onclick="handleClick(event, 'Volt.jpg')">
+        <area target="" alt="Knopf5" title="Knopf5" href="#" coords="584,215,629,249" shape="rect" onclick="handleClick(event, 'range.jpg')">
+    </map>
+
+    <map name="image-map-oziloskop" id="image-map-oziloskop">
+        <area target="" alt="Knopf2" title="Knopf2" href="#" coords="731,143,774,179" shape="rect" onclick="handleClick(event, 'Milliamper.jpg')">
+        <!-- Weitere Bereiche können hier hinzugefügt werden -->
+    </map>
+
+    <map name="image-map-schaltplan" id="image-map-schaltplan">
+        <area target="" alt="Knopf3" title="Knopf3" href="#" coords="745,152,784,188" shape="rect" onclick="handleClick(event,'Amper.jpg')">
+        <!-- Weitere Bereiche können hier hinzugefügt werden -->
+    </map>
+
+    <map name="image-map-etwas" id="image-map-etwas">
+        <area target="" alt="Knopf4" title="Knopf4" href="#" coords="736,154,773,189" shape="rect" onclick="handleClick(event, 'Wiederstand.jpg')">
+        <!-- Weitere Bereiche können hier hinzugefügt werden -->
+    </map>
+
+    <script>
+        function handleClick(event, newSrc) {
+            event.preventDefault(); // Verhindert das Standardverhalten des Links
+            changeImage(newSrc);
+        }
+
+        function changeImage(newSrc) {
+            const mainImage = document.getElementById('mainImage');
+            mainImage.src = newSrc;
+            toggleBackButton(newSrc !== 'multimeterStart.jpg');
+            toggleImagemap(newSrc);
+            toggleTitle(newSrc === 'multimeterStart.jpg');
+        }
+
+        function toggleBackButton(show) {
+            const backButton = document.getElementById('backButton');
+            backButton.style.display = show ? 'block' : 'none';
+        }
+
+        function toggleImagemap(newSrc) {
+            const mainImage = document.getElementById('mainImage');
+            document.body.classList.remove('oziloskop-map-active', 'schaltplan-map-active', 'etwas-map-active');
+            if (newSrc === 'Volt.jpg') {
+                mainImage.useMap = '#image-map-oziloskop';
+                document.body.classList.add('oziloskop-map-active');
+            } else if (newSrc === 'Milliamper.jpg') {
+                mainImage.useMap = '#image-map-schaltplan';
+                document.body.classList.add('schaltplan-map-active');
+            } else if (newSrc === 'Amper.jpg') {
+                mainImage.useMap = '#image-map-etwas';
+                document.body.classList.add('etwas-map-active');
+            } else {
+                mainImage.useMap = '#image-map-multimeter';
+            }
+        }
+
+        function toggleTitle(show) {
+            const title = document.getElementById('imageTitle');
+            title.classList.toggle('hidden', !show);
+        }
+    </script>
+
+</body>
+</html>
